@@ -45,6 +45,9 @@ namespace Translator_RapidScada
         public TranslatorForm()
         {
             InitializeComponent();
+
+            if(!String.IsNullOrEmpty(Properties.Settings.Default.FolderPath))
+                chosenPathLabel1.Text = Properties.Settings.Default.FolderPath;
         }
 
         // extraction of xml files
@@ -70,7 +73,10 @@ namespace Translator_RapidScada
                         }
                     }
 
-                    chosenPathLabel1.Text = "Selection : " + _folderPath;
+                    Properties.Settings.Default.FolderPath = _folderPath;
+                    Properties.Settings.Default.Save();
+
+                    chosenPathLabel1.Text = "Selection : " + Properties.Settings.Default.FolderPath;
                 }
                 catch (Exception ex)
                 {
@@ -102,28 +108,31 @@ namespace Translator_RapidScada
 
         private void button3_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            foreach (string file in _files)
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.FolderPath) && !String.IsNullOrEmpty(_excelPath))
             {
-                CreateRelationshipTable(file);
+                this.Cursor = Cursors.WaitCursor;
+
+                foreach (string file in _files)
+                {
+                    CreateRelationshipTable(file);
+                }
+
+                ExcelCreation();
+
+
+                //réinitialisation des variables
+                _folderPath = "";
+                _excelPath = "";
+                _files = new List<string>();
+                _listLanguages = new List<string>();
+                _dicoxfilename = new Dictionary<string, List<string>>();
+                _dicoTranslation = new Dictionary<string, Dictionary<string, List<string[]>>>();
+                _currentDt = new DataTable();
+                chosenPathLabel1.Text = "Selection : " + Properties.Settings.Default.FolderPath;
+                labelCheminExcel.Text = "";
+
+                this.Cursor = Cursors.Default;
             }
-
-            ExcelCreation();
-
-
-            //réinitialisation des variables
-            _folderPath = "";
-            _excelPath = "";
-            _files = new List<string>();
-            _listLanguages = new List<string>();
-            _dicoxfilename = new Dictionary<string, List<string>>();
-            _dicoTranslation = new Dictionary<string, Dictionary<string, List<string[]>>>();
-            _currentDt = new DataTable();
-            chosenPathLabel1.Text = "";
-            labelCheminExcel.Text = "";
-
-            this.Cursor = Cursors.Default;
         }
 
         // creation of relationship table
