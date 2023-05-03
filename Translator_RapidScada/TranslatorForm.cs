@@ -16,6 +16,8 @@ using OfficeOpenXml.Drawing;
 using System.Data.Common;
 using System.IO.Packaging;
 using OfficeOpenXml.Filter;
+using Shell32;
+
 
 namespace Translator_RapidScada
 {
@@ -62,14 +64,28 @@ namespace Translator_RapidScada
                 {
                     _folderPath = folderBrowserDialog.SelectedPath;
 
-                    // sélectionner tous les fichiers xml
-                    foreach (string path in _pathsXml)
+                    foreach(string directory in Directory.GetFiles(_folderPath, "*.lnk"))
                     {
-                        string pathCombine = _folderPath + path;
-
-                        foreach (string file in Directory.GetFiles(pathCombine, "*.xml"))
+                        foreach (string path in _pathsXml)
                         {
-                            _files.Add(file);
+                            if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
+                            {
+                                Shell shell = new Shell();
+                                Folder folder = shell.NameSpace(Path.GetDirectoryName(directory));
+                                FolderItem folderItem = folder.ParseName(Path.GetFileName(directory));
+                                if (folderItem != null)
+                                {
+                                    ShellLinkObject link = (ShellLinkObject)folderItem.GetLink;
+                                    string targetPath = link.Path;
+                                    string[] pathLastFolder = path.Split('\\');
+                                    string pathCombine = Path.Combine(targetPath, pathLastFolder[pathLastFolder.Length-1]);
+                                    if (Directory.Exists(pathCombine))
+                                    {
+                                        foreach (string file in Directory.GetFiles(pathCombine, "*.xml"))
+                                            _files.Add(file);
+                                    }
+                                }
+                            }
                         }
                     }
 
