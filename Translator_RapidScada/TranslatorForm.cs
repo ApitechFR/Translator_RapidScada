@@ -64,31 +64,6 @@ namespace Translator_RapidScada
                 {
                     _folderPath = folderBrowserDialog.SelectedPath;
 
-                    foreach(string directory in Directory.GetFiles(_folderPath, "*.lnk"))
-                    {
-                        foreach (string path in _pathsXml)
-                        {
-                            if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
-                            {
-                                Shell shell = new Shell();
-                                Folder folder = shell.NameSpace(Path.GetDirectoryName(directory));
-                                FolderItem folderItem = folder.ParseName(Path.GetFileName(directory));
-                                if (folderItem != null)
-                                {
-                                    ShellLinkObject link = (ShellLinkObject)folderItem.GetLink;
-                                    string targetPath = link.Path;
-                                    string[] pathLastFolder = path.Split('\\');
-                                    string pathCombine = Path.Combine(targetPath, pathLastFolder[pathLastFolder.Length-1]);
-                                    if (Directory.Exists(pathCombine))
-                                    {
-                                        foreach (string file in Directory.GetFiles(pathCombine, "*.xml"))
-                                            _files.Add(file);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
                     Properties.Settings.Default.FolderPath = _folderPath;
                     Properties.Settings.Default.Save();
 
@@ -127,6 +102,32 @@ namespace Translator_RapidScada
             if (!String.IsNullOrEmpty(Properties.Settings.Default.FolderPath) && !String.IsNullOrEmpty(_excelPath))
             {
                 this.Cursor = Cursors.WaitCursor;
+
+
+                foreach (string directory in Directory.GetFiles(Properties.Settings.Default.FolderPath, "*.lnk"))
+                {
+                    foreach (string path in _pathsXml)
+                    {
+                        if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
+                        {
+                            Shell shell = new Shell();
+                            Folder folder = shell.NameSpace(Path.GetDirectoryName(directory));
+                            FolderItem folderItem = folder.ParseName(Path.GetFileName(directory));
+                            if (folderItem != null)
+                            {
+                                ShellLinkObject link = (ShellLinkObject)folderItem.GetLink;
+                                string targetPath = link.Path;
+                                string[] pathLastFolder = path.Split('\\');
+                                string pathCombine = Path.Combine(targetPath, pathLastFolder[pathLastFolder.Length - 1]);
+                                if (Directory.Exists(pathCombine))
+                                {
+                                    foreach (string file in Directory.GetFiles(pathCombine, "*.xml"))
+                                        _files.Add(file);
+                                }
+                            }
+                        }
+                    }
+                }
 
                 foreach (string file in _files)
                 {
@@ -557,17 +558,42 @@ namespace Translator_RapidScada
                     if (dicoFile.Key == dico.Key)
                     {
                         bool pathExists = false;
+                        string tempDirectoryForPathExist = "";
 
                         // création des dossiers contenant le fichier xml d'arrivé
                         foreach (string path in dicoFile.Value)
                         {
-                            string[] splitWithSCADA = path.Split(new[] { "\\SCADA\\" }, StringSplitOptions.None);
+                            string scada = path.Contains("SCADA") ? "SCADA" : "scada";
+                            string[] splitWithSCADA = path.Split(new[] { $@"\{scada}\" }, StringSplitOptions.None);
                             string subfolderPathWithExtentions = splitWithSCADA[1];
                             string[] SplitWithAng = subfolderPathWithExtentions.Split(new[] { "ang\\" }, StringSplitOptions.None);
+                            if (tempDirectoryForPathExist != SplitWithAng[0])
+                            {
+                                tempDirectoryForPathExist = SplitWithAng[0];
+                                pathExists = false;
+                            }
                             string subfolderPath = SplitWithAng[0] + "ang";
                             string pathCombine = Path.Combine(folderName, subfolderPath);
                             string completePath = Path.Combine(_folderPath, pathCombine);
+                            //foreach (string path in dicoFile.Value)
+                            //{
+                            //    string[] splitScada = path.Split("\\");
+                            //    int indexStartingPath = 0;
+                            //    for(int i =0; i < splitScada.Length; i++)
+                            //    {
+                            //        if (splitScada[i].Contains("Scada"))
+                            //        {
+                            //            indexStartingPath = i;
+                            //            break;
+                            //        }
+                            //    }
 
+                            //    string simplePath = "";
+                            //    for(int i = indexStartingPath; i<splitScada.Length-1; i++)
+                            //    {
+                            //        simplePath += $@"\{splitScada[i]}";
+                            //    }
+                            //    string curentPath = curentFilePath + simplePath;
 
                             if (!Directory.Exists(completePath))
                             {
@@ -583,9 +609,14 @@ namespace Translator_RapidScada
                                     string[] sTemp = SplitWithAng[1].Split('.');
                                     string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
                                     string filePath = Path.Combine(pathCombine, newFileName);
-
                                     XmlDocument xmlDoc = new XmlDocument();
                                     string completePathDoc = Path.Combine(_folderPath, filePath);
+                                    //string[] sTemp = Path.GetFileName(curentPath + "\\" + Path.GetFileName(path)).Split('.');
+                                    //string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
+                                    //string filePath = Path.Combine(simplePath, newFileName);
+
+                                    //XmlDocument xmlDoc = new XmlDocument();
+                                    //string completePathDoc = curentPath + "\\" + newFileName;
                                     if (!File.Exists(completePathDoc))
                                     {
                                         CreateXML(xmlDoc, sTemp[0]);
