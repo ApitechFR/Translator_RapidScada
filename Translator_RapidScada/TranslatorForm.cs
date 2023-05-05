@@ -166,6 +166,7 @@ namespace Translator_RapidScada
                 string[] splitPath = filePath.Split('\\');
                 string[] splitsplitPath = splitPath[splitPath.Length - 1].Split('.');
                 string name = splitsplitPath[0];
+                if (name == "ScadaCommon") name = "Scada";
 
                 XmlNodeList nodesDictionary = xmlDoc.SelectNodes("/*[local-name()='" + name + "Dictionaries']/*[local-name()='Dictionary']");
 
