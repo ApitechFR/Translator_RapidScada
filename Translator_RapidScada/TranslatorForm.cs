@@ -49,7 +49,7 @@ namespace Translator_RapidScada
         {
             InitializeComponent();
 
-            if(!String.IsNullOrEmpty(Properties.Settings.Default.FolderPath))
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.FolderPath))
                 chosenPathLabel1.Text = Properties.Settings.Default.FolderPath;
         }
 

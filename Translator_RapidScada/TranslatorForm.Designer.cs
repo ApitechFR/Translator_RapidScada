@@ -208,7 +208,7 @@
             ClientSize = new Size(1033, 457);
             Controls.Add(splitContainer1);
             Name = "TranslatorForm";
-            Text = "Form1";
+            Text = "Translator";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
