@@ -17,7 +17,8 @@ using System.Data.Common;
 using System.IO.Packaging;
 using OfficeOpenXml.Filter;
 using Shell32;
-
+using System.Security.Cryptography;
+using System.IO;
 
 namespace Translator_RapidScada
 {
@@ -541,10 +542,18 @@ namespace Translator_RapidScada
 
         public void ExcelDataExtraction()
         {
-
-            // création du dossier principal 
             string folderName = "scada_fr";
-            string curentFilePath = Path.Combine(_folderPath, folderName);
+            string curentFilePath = "";
+            if (_folderPath == Properties.Settings.Default.FolderPath)
+            {
+                string[] splitFolderPath = Properties.Settings.Default.FolderPath.Split(@"\");
+                folderName = splitFolderPath[splitFolderPath.Length - 1];
+                _folderPath = Path.GetDirectoryName(_folderPath);
+                curentFilePath = Properties.Settings.Default.FolderPath;
+            }
+            else curentFilePath = Path.Combine(_folderPath, folderName);
+
+
             if (!Directory.Exists(curentFilePath))
             {
                 Directory.CreateDirectory(curentFilePath);
@@ -564,6 +573,7 @@ namespace Translator_RapidScada
                         // création des dossiers contenant le fichier xml d'arrivé
                         foreach (string path in dicoFile.Value)
                         {
+
                             string scada = path.Contains("SCADA") ? "SCADA" : "scada";
                             string[] splitWithSCADA = path.Split(new[] { $@"\{scada}\" }, StringSplitOptions.None);
                             string subfolderPathWithExtentions = splitWithSCADA[1];
@@ -576,25 +586,13 @@ namespace Translator_RapidScada
                             string subfolderPath = SplitWithAng[0] + "ang";
                             string pathCombine = Path.Combine(folderName, subfolderPath);
                             string completePath = Path.Combine(_folderPath, pathCombine);
-                            //foreach (string path in dicoFile.Value)
-                            //{
-                            //    string[] splitScada = path.Split("\\");
-                            //    int indexStartingPath = 0;
-                            //    for(int i =0; i < splitScada.Length; i++)
-                            //    {
-                            //        if (splitScada[i].Contains("Scada"))
-                            //        {
-                            //            indexStartingPath = i;
-                            //            break;
-                            //        }
-                            //    }
 
-                            //    string simplePath = "";
-                            //    for(int i = indexStartingPath; i<splitScada.Length-1; i++)
-                            //    {
-                            //        simplePath += $@"\{splitScada[i]}";
-                            //    }
-                            //    string curentPath = curentFilePath + simplePath;
+                            //déterminer si ce dossier est un raccourci ou non 
+                            bool isALink = IsLink(completePath);
+                            if (isALink)
+                            {
+                                completePath = Path.GetDirectoryName(path);
+                            }
 
                             if (!Directory.Exists(completePath))
                             {
@@ -609,15 +607,18 @@ namespace Translator_RapidScada
                                 {
                                     string[] sTemp = SplitWithAng[1].Split('.');
                                     string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
-                                    string filePath = Path.Combine(pathCombine, newFileName);
+                                    string completePathDoc = "";
+                                    if (isALink)
+                                    {
+                                        completePathDoc = Path.Combine(completePath, newFileName);
+                                    }
+                                    else
+                                    {
+                                        string filePath = Path.Combine(pathCombine, newFileName);
+                                        completePathDoc = Path.Combine(_folderPath, filePath);
+                                    }
                                     XmlDocument xmlDoc = new XmlDocument();
-                                    string completePathDoc = Path.Combine(_folderPath, filePath);
-                                    //string[] sTemp = Path.GetFileName(curentPath + "\\" + Path.GetFileName(path)).Split('.');
-                                    //string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
-                                    //string filePath = Path.Combine(simplePath, newFileName);
 
-                                    //XmlDocument xmlDoc = new XmlDocument();
-                                    //string completePathDoc = curentPath + "\\" + newFileName;
                                     if (!File.Exists(completePathDoc))
                                     {
                                         CreateXML(xmlDoc, sTemp[0]);
@@ -693,6 +694,14 @@ namespace Translator_RapidScada
 
             XmlElement balisePrincipale = doc.CreateElement(nomFichier + "Dictionaries");
             doc.AppendChild(balisePrincipale);
+        }
+
+        public bool IsLink(string path)
+        {
+            DirectoryInfo dossierInfo = new DirectoryInfo(path);
+
+            if (dossierInfo.Attributes.HasFlag(FileAttributes.ReparsePoint)) return true;
+            return false;
         }
     }
 }
