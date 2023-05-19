@@ -668,13 +668,27 @@ namespace Translator_RapidScada
                                     {
                                         xmlDoc.Load(completePathDoc);
 
+                                        // si la phrase existe déjà avec ou sans traduction, on doit ajouter ou modifier la traduction
+
+                                        XmlNode targetNode = xmlDoc.SelectSingleNode($"//Phrase[@key='{translation.Key}']");
+
+                                        bool createPharse = true;
+
+                                        if (targetNode != null)
+                                        {
+                                            targetNode.InnerText = translation.Value[0][0];
+                                            createDictionaryInXml = false;
+                                            createPharse = false;
+                                        }
+
                                         if (createDictionaryInXml)
                                         {
                                             CreateDicoInXML(xmlDoc, dico.Key);
                                             createDictionaryInXml = false;
                                         }
 
-                                        CreatePhraseInXML(xmlDoc, translation.Key, translation.Value[0][0], dico.Key);
+                                        if(createPharse)
+                                            CreatePhraseInXML(xmlDoc, translation.Key, translation.Value[0][0], dico.Key);
                                     }
                                     xmlDoc.Save(completePathDoc);
                                 }
@@ -713,7 +727,8 @@ namespace Translator_RapidScada
                         XmlAttribute keyPhrase = doc.CreateAttribute("key");
                         keyPhrase.Value = clefPhrase;
                         phrase.Attributes.Append(keyPhrase);
-                        phrase.InnerText = traduction;
+                        if(phrase.InnerText != traduction)
+                            phrase.InnerText = traduction;
                     }
                 }
                 count++;
