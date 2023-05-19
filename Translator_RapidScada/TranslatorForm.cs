@@ -104,6 +104,7 @@ namespace Translator_RapidScada
             {
                 this.Cursor = Cursors.WaitCursor;
 
+                // si dossier contient des raccourcis
 
                 foreach (string directory in Directory.GetFiles(Properties.Settings.Default.FolderPath, "*.lnk"))
                 {
@@ -111,6 +112,8 @@ namespace Translator_RapidScada
                     {
                         if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
                         {
+                            Properties.Settings.Default.IsALink = true;
+                            Properties.Settings.Default.Save();
                             Shell shell = new Shell();
                             Folder folder = shell.NameSpace(Path.GetDirectoryName(directory));
                             FolderItem folderItem = folder.ParseName(Path.GetFileName(directory));
@@ -125,6 +128,26 @@ namespace Translator_RapidScada
                                     foreach (string file in Directory.GetFiles(pathCombine, "*.xml"))
                                         _files.Add(file);
                                 }
+                            }
+                        }
+                    }
+                }
+
+                // sinon
+                foreach (string directory in Directory.GetDirectories(Properties.Settings.Default.FolderPath))
+                {
+                    foreach (string path in _pathsXml)
+                    {
+                        if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
+                        {
+                            Properties.Settings.Default.IsALink = false;
+                            Properties.Settings.Default.Save();
+                            string completePath = Properties.Settings.Default.FolderPath;
+                            string pathCombine = completePath + path;
+                            if (Directory.Exists(pathCombine))
+                            {
+                                foreach (string file in Directory.GetFiles(pathCombine, "*.xml"))
+                                    _files.Add(file);
                             }
                         }
                     }
@@ -402,7 +425,10 @@ namespace Translator_RapidScada
                 {
                     _excelPath = openFileDialog.FileName;
 
-                    label5.Text = "Selection : " + _excelPath;
+                    Properties.Settings.Default.XlsxPath = _excelPath;
+                    Properties.Settings.Default.Save();
+
+                    label5.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
                 }
             }
         }
@@ -429,7 +455,7 @@ namespace Translator_RapidScada
                 }
             }
 
-            if (_excelPath != "")
+            if (Properties.Settings.Default.XlsxPath != "")
             {
                 using (var progressDialog = new Form())
                 {
@@ -440,6 +466,12 @@ namespace Translator_RapidScada
                     progressDialog.AutoSize = true;
                     progressDialog.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                     progressDialog.Show();
+
+
+                    _listLanguages = new List<string>();
+                    _dicoxfilename = new Dictionary<string, List<string>>();
+                    _dicoTranslation = new Dictionary<string, Dictionary<string, List<string[]>>>();
+                    _currentDt = new DataTable();
 
                     LoadFormSettings();
                     ExcelDataExtraction();
@@ -459,7 +491,7 @@ namespace Translator_RapidScada
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
             // ajout des données de l'excel dans une datatable afin d'utiliser les données
-            using (ExcelPackage package = new ExcelPackage(new System.IO.FileInfo(_excelPath)))
+            using (ExcelPackage package = new ExcelPackage(new System.IO.FileInfo(Properties.Settings.Default.XlsxPath)))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
@@ -543,13 +575,16 @@ namespace Translator_RapidScada
         public void ExcelDataExtraction()
         {
             string folderName = "scada_fr";
+            bool saveInAnOtherFolder = true;
             string curentFilePath = "";
+
             if (_folderPath == Properties.Settings.Default.FolderPath)
             {
-                string[] splitFolderPath = Properties.Settings.Default.FolderPath.Split(@"\");
+                saveInAnOtherFolder = false;
+                string[] splitFolderPath = _folderPath.Split(@"\");
                 folderName = splitFolderPath[splitFolderPath.Length - 1];
                 _folderPath = Path.GetDirectoryName(_folderPath);
-                curentFilePath = Properties.Settings.Default.FolderPath;
+                curentFilePath = _folderPath + @"\" + folderName;
             }
             else curentFilePath = Path.Combine(_folderPath, folderName);
 
@@ -588,8 +623,8 @@ namespace Translator_RapidScada
                             string completePath = Path.Combine(_folderPath, pathCombine);
 
                             //déterminer si ce dossier est un raccourci ou non 
-                            bool isALink = IsLink(completePath);
-                            if (isALink)
+                            bool isALink = Properties.Settings.Default.IsALink;
+                            if (isALink && !saveInAnOtherFolder)
                             {
                                 completePath = Path.GetDirectoryName(path);
                             }
@@ -608,7 +643,7 @@ namespace Translator_RapidScada
                                     string[] sTemp = SplitWithAng[1].Split('.');
                                     string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
                                     string completePathDoc = "";
-                                    if (isALink)
+                                    if (isALink && !saveInAnOtherFolder)
                                     {
                                         completePathDoc = Path.Combine(completePath, newFileName);
                                     }
@@ -694,14 +729,6 @@ namespace Translator_RapidScada
 
             XmlElement balisePrincipale = doc.CreateElement(nomFichier + "Dictionaries");
             doc.AppendChild(balisePrincipale);
-        }
-
-        public bool IsLink(string path)
-        {
-            DirectoryInfo dossierInfo = new DirectoryInfo(path);
-
-            if (dossierInfo.Attributes.HasFlag(FileAttributes.ReparsePoint)) return true;
-            return false;
         }
     }
 }
