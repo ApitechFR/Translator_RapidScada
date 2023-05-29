@@ -160,10 +160,10 @@
     <value>Voulez vous modifier ce fichier ?</value>
   </data>
   <data name="_msgExcel" xml:space="preserve">
-    <value>Le fichier Excel existe déjà.</value>
+    <value>Le tableur existe déjà.</value>
   </data>
   <data name="_msgGenerationExcel" xml:space="preserve">
-    <value>L'excel a bien été généré.</value>
+    <value>Le tableur a bien été généré.</value>
   </data>
   <data name="_msgGenerationFolder" xml:space="preserve">
     <value>Le dossier a bien été généré.</value>

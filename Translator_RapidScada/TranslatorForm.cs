@@ -39,9 +39,9 @@ namespace Translator_RapidScada
 
         private string _errFolder = "Erreur: Impossible de choisir ce dossier.";
         private string _errFile = "Erreur: le chemin jusqu'à votre fichier n'existe pas.";
-        private string _msgExcel = "Le fichier Excel existe déjà.";
+        private string _msgExcel = "Le tableur existe déjà.";
         private string _msgEditFile = "Voulez vous modifier ce fichier ?";
-        private string _msgGenerationExcel = "L'excel a bien été généré.";
+        private string _msgGenerationExcel = "Le tableur a bien été généré.";
         private string _msgWorkInProgress = "Travail en cours...";
         private string _msgGenerationFolder = "Le dossier a bien été généré.";
 
@@ -83,7 +83,7 @@ namespace Translator_RapidScada
             }
         }
 
-        // choose the folder where the Excel will be saved
+        // choose the folder where the spreadsheet will be saved
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -252,7 +252,7 @@ namespace Translator_RapidScada
 
         }
 
-        // Excel creation
+        // spreadsheet creation
 
         private void ExcelCreation()
         {
@@ -311,7 +311,7 @@ namespace Translator_RapidScada
             }
         }
 
-        // send xml to excel
+        // send xml to spreadsheet
 
         private void transformToExcel()
         {
@@ -576,7 +576,7 @@ namespace Translator_RapidScada
             }
         }
 
-        // excel data extraction
+        // spreadsheet data extraction
 
         public void ExcelDataExtraction()
         {
