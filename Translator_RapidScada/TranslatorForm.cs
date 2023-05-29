@@ -45,6 +45,12 @@ namespace Translator_RapidScada
         private string _msgWorkInProgress = "Travail en cours...";
         private string _msgGenerationFolder = "Le dossier a bien été généré.";
 
+        private string _tabDicoKey = "Clef du dictionnaire";
+        private string _tabPhraseKey = "Clef de la phrase";
+        private string _isNewTard = "Est une nouvelle traduction";
+
+
+
         public TranslatorForm()
         {
             InitializeComponent();
@@ -314,9 +320,9 @@ namespace Translator_RapidScada
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Traduction 1");
 
                 worksheet.Cells[1, 1].Value = "XML PATH";
-                worksheet.Cells[1, 2].Value = "Clef Dictionnaire";
-                worksheet.Cells[1, 3].Value = "Clef Phrase";
-                worksheet.Cells[1, 4].Value = "Est une nouvelle traduction";
+                worksheet.Cells[1, 2].Value = _tabDicoKey;
+                worksheet.Cells[1, 3].Value = _tabPhraseKey;
+                worksheet.Cells[1, 4].Value = _isNewTard;
 
 
                 int row = 2;

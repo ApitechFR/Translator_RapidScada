@@ -153,6 +153,9 @@
   <data name="_errFolder" xml:space="preserve">
     <value>Erreur: Impossible de choisir ce dossier.</value>
   </data>
+  <data name="_isNewTard" xml:space="preserve">
+    <value>Est une nouvelle traduction</value>
+  </data>
   <data name="_msgEditFile" xml:space="preserve">
     <value>Voulez vous modifier ce fichier ?</value>
   </data>
@@ -167,5 +170,11 @@
   </data>
   <data name="_msgWorkInProgress" xml:space="preserve">
     <value>Travail en cours...</value>
+  </data>
+  <data name="_tabDicoKey" xml:space="preserve">
+    <value>Clef du dictionnaire</value>
+  </data>
+  <data name="_tabPhraseKey" xml:space="preserve">
+    <value>Clef de la phrase</value>
   </data>
 </root>
