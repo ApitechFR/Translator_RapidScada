@@ -83,7 +83,7 @@
             button3.Name = "button3";
             button3.Size = new Size(355, 29);
             button3.TabIndex = 7;
-            button3.Text = "Génération du tableau de traductions Excel";
+            button3.Text = "Générer le tableau";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
@@ -97,7 +97,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(383, 250);
+            button2.Location = new Point(407, 246);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 5;
@@ -108,11 +108,11 @@
             // labelChoixEmplacementExcel
             // 
             labelChoixEmplacementExcel.AutoSize = true;
-            labelChoixEmplacementExcel.Location = new Point(12, 254);
+            labelChoixEmplacementExcel.Location = new Point(48, 250);
             labelChoixEmplacementExcel.Name = "labelChoixEmplacementExcel";
-            labelChoixEmplacementExcel.Size = new Size(317, 20);
+            labelChoixEmplacementExcel.Size = new Size(315, 20);
             labelChoixEmplacementExcel.TabIndex = 4;
-            labelChoixEmplacementExcel.Text = "Choisissez où enregistrer le futur fichier Excel : ";
+            labelChoixEmplacementExcel.Text = "Choisir l'emplacement du tableur de référence";
             // 
             // chosenPathLabel1
             // 
@@ -125,7 +125,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(383, 162);
+            button1.Location = new Point(407, 158);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 2;
@@ -136,21 +136,21 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(12, 162);
+            label2.Location = new Point(3, 162);
             label2.Name = "label2";
-            label2.Size = new Size(206, 20);
+            label2.Size = new Size(398, 20);
             label2.TabIndex = 1;
-            label2.Text = "Choisissez le dossier SCADA : ";
+            label2.Text = "Choisir le dossier SCADA contenant les traductions initiales";
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(112, 43);
+            label1.Location = new Point(21, 43);
             label1.Name = "label1";
-            label1.Size = new Size(254, 37);
+            label1.Size = new Size(467, 37);
             label1.TabIndex = 0;
-            label1.Text = "Création de l'Excel";
+            label1.Text = "Génération du tableur de référence";
             label1.TextAlign = ContentAlignment.TopCenter;
             // 
             // label5
@@ -208,7 +208,7 @@
             ClientSize = new Size(1033, 457);
             Controls.Add(splitContainer1);
             Name = "TranslatorForm";
-            Text = "Translator";
+            Text = "Scada Translator";
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);

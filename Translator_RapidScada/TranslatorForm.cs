@@ -693,7 +693,7 @@ namespace Translator_RapidScada
                                             createDictionaryInXml = false;
                                         }
 
-                                        if(createPharse)
+                                        if (createPharse)
                                             CreatePhraseInXML(xmlDoc, translation.Key, translation.Value[0][0], dico.Key);
                                     }
                                     xmlDoc.Save(completePathDoc);
@@ -733,7 +733,7 @@ namespace Translator_RapidScada
                         XmlAttribute keyPhrase = doc.CreateAttribute("key");
                         keyPhrase.Value = clefPhrase;
                         phrase.Attributes.Append(keyPhrase);
-                        if(phrase.InnerText != traduction)
+                        if (phrase.InnerText != traduction)
                             phrase.InnerText = traduction;
                     }
                 }
