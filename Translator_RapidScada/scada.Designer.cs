@@ -79,6 +79,24 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à Aucun fichier sélectionné..
+        /// </summary>
+        internal static string _errSelectionFile {
+            get {
+                return ResourceManager.GetString("_errSelectionFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Est une nouvelle traduction.
+        /// </summary>
+        internal static string _isNewTard {
+            get {
+                return ResourceManager.GetString("_isNewTard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Voulez vous modifier ce fichier ?.
         /// </summary>
         internal static string _msgEditFile {
@@ -88,7 +106,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Le fichier Excel existe déjà..
+        ///   Recherche une chaîne localisée semblable à Le tableur existe déjà..
         /// </summary>
         internal static string _msgExcel {
             get {
@@ -97,7 +115,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à L&apos;excel a bien été généré..
+        ///   Recherche une chaîne localisée semblable à Le tableur a bien été généré..
         /// </summary>
         internal static string _msgGenerationExcel {
             get {
@@ -120,6 +138,24 @@ namespace Translator_RapidScada {
         internal static string _msgWorkInProgress {
             get {
                 return ResourceManager.GetString("_msgWorkInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Clef du dictionnaire.
+        /// </summary>
+        internal static string _tabDicoKey {
+            get {
+                return ResourceManager.GetString("_tabDicoKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Clef de la phrase.
+        /// </summary>
+        internal static string _tabPhraseKey {
+            get {
+                return ResourceManager.GetString("_tabPhraseKey", resourceCulture);
             }
         }
         

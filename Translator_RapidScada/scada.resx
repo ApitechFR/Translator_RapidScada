@@ -153,6 +153,9 @@
   <data name="_errFolder" xml:space="preserve">
     <value>Erreur: Impossible de choisir ce dossier.</value>
   </data>
+  <data name="_errSelectionFile" xml:space="preserve">
+    <value>Aucun fichier sélectionné.</value>
+  </data>
   <data name="_isNewTard" xml:space="preserve">
     <value>Est une nouvelle traduction</value>
   </data>

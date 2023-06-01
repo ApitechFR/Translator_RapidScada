@@ -90,14 +90,14 @@
             // labelCheminExcel
             // 
             labelCheminExcel.AutoSize = true;
-            labelCheminExcel.Location = new Point(12, 297);
+            labelCheminExcel.Location = new Point(12, 288);
             labelCheminExcel.Name = "labelCheminExcel";
             labelCheminExcel.Size = new Size(0, 20);
             labelCheminExcel.TabIndex = 6;
             // 
             // button2
             // 
-            button2.Location = new Point(407, 246);
+            button2.Location = new Point(394, 246);
             button2.Name = "button2";
             button2.Size = new Size(94, 29);
             button2.TabIndex = 5;
@@ -108,7 +108,7 @@
             // labelChoixEmplacementExcel
             // 
             labelChoixEmplacementExcel.AutoSize = true;
-            labelChoixEmplacementExcel.Location = new Point(48, 250);
+            labelChoixEmplacementExcel.Location = new Point(12, 250);
             labelChoixEmplacementExcel.Name = "labelChoixEmplacementExcel";
             labelChoixEmplacementExcel.Size = new Size(315, 20);
             labelChoixEmplacementExcel.TabIndex = 4;
@@ -118,14 +118,14 @@
             // 
             chosenPathLabel1.AutoSize = true;
             chosenPathLabel1.ImageAlign = ContentAlignment.MiddleLeft;
-            chosenPathLabel1.Location = new Point(12, 194);
+            chosenPathLabel1.Location = new Point(12, 205);
             chosenPathLabel1.Name = "chosenPathLabel1";
             chosenPathLabel1.Size = new Size(0, 20);
             chosenPathLabel1.TabIndex = 3;
             // 
             // button1
             // 
-            button1.Location = new Point(407, 158);
+            button1.Location = new Point(394, 162);
             button1.Name = "button1";
             button1.Size = new Size(94, 29);
             button1.TabIndex = 2;
@@ -135,10 +135,9 @@
             // 
             // label2
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(3, 162);
+            label2.Location = new Point(12, 162);
             label2.Name = "label2";
-            label2.Size = new Size(398, 20);
+            label2.Size = new Size(348, 41);
             label2.TabIndex = 1;
             label2.Text = "Choisir le dossier SCADA contenant les traductions initiales";
             // 
@@ -173,7 +172,7 @@
             // 
             // button4
             // 
-            button4.Location = new Point(400, 162);
+            button4.Location = new Point(371, 162);
             button4.Name = "button4";
             button4.Size = new Size(94, 29);
             button4.TabIndex = 8;
@@ -194,7 +193,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(22, 43);
+            label3.Location = new Point(9, 43);
             label3.Name = "label3";
             label3.Size = new Size(486, 37);
             label3.TabIndex = 8;

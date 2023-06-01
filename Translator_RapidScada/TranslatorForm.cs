@@ -29,6 +29,7 @@ namespace Translator_RapidScada
         private List<string> _files = new List<string>(); // selected folder paths
 
         private string[] _pathsXml = { @"\ScadaWeb\plugins\Chart\lang", @"\ScadaWeb\plugins\Config\lang", @"\ScadaWeb\plugins\Registration\lang", @"\ScadaWeb\plugins\SchBasicComp\lang", @"\ScadaWeb\plugins\Scheme\lang", @"\ScadaWeb\plugins\Store\lang", @"\ScadaWeb\plugins\Table\lang", @"\ScadaWeb\plugins\WebPage\lang", @"\ScadaWeb\lang", @"\ScadaTableEditor\Lang", @"\ScadaServer\Lang", @"\ScadaSchemeEditor\Lang", @"\ScadaComm\Lang", @"\ScadaAgent\Lang", @"\ScadaAdmin\Lang" };
+        private string[] _modulesNames = { "ScadaWeb", "ScadaTableEditor", "ScadaServer", "ScadaSchemeEditor", "ScadaComm", "ScadaAgent", "ScadaAdmin" };
 
         private List<string> _listLanguages = new List<string>(); // languages list
         private Dictionary<string, List<string>> _dicoxfilename = new Dictionary<string, List<string>>(); // dictionnary <Dico, NomFichier>
@@ -44,6 +45,7 @@ namespace Translator_RapidScada
         private string _msgGenerationExcel = "Le tableur a bien été généré.";
         private string _msgWorkInProgress = "Travail en cours...";
         private string _msgGenerationFolder = "Le dossier a bien été généré.";
+        private string _errSelectionFile = "Aucun fichier sélectionné.";
 
         private string _tabDicoKey = "Clef du dictionnaire";
         private string _tabPhraseKey = "Clef de la phrase";
@@ -87,6 +89,7 @@ namespace Translator_RapidScada
 
         private void button2_Click(object sender, EventArgs e)
         {
+
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
@@ -100,6 +103,8 @@ namespace Translator_RapidScada
                     MessageBox.Show(_errFolder + ex.Message);
                 }
             }
+
+
         }
 
         // Excel generation
@@ -118,8 +123,6 @@ namespace Translator_RapidScada
                     {
                         if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
                         {
-                            Properties.Settings.Default.IsALink = true;
-                            Properties.Settings.Default.Save();
                             Shell shell = new Shell();
                             Folder folder = shell.NameSpace(Path.GetDirectoryName(directory));
                             FolderItem folderItem = folder.ParseName(Path.GetFileName(directory));
@@ -146,8 +149,6 @@ namespace Translator_RapidScada
                     {
                         if (path.Contains(Path.GetFileNameWithoutExtension(directory)))
                         {
-                            Properties.Settings.Default.IsALink = false;
-                            Properties.Settings.Default.Save();
                             string completePath = Properties.Settings.Default.FolderPath;
                             string pathCombine = completePath + path;
                             if (Directory.Exists(pathCombine))
@@ -580,24 +581,18 @@ namespace Translator_RapidScada
 
         public void ExcelDataExtraction()
         {
-            string folderName = "scada_fr";
-            bool saveInAnOtherFolder = true;
-            string curentFilePath = "";
+            //tableau regroupant tous les dossiers raccourcis du dossier selectionné
 
-            if (_folderPath == Properties.Settings.Default.FolderPath)
+            string[] shortCutDirectories = Directory.GetFiles(_folderPath, "*.lnk");
+
+            // pour chaque module, on va vérifier s'il appartient ou non à l'arborescence déjà présente dans le dossier choisi
+            foreach (string moduleName in _modulesNames)
             {
-                saveInAnOtherFolder = false;
-                string[] splitFolderPath = _folderPath.Split(@"\");
-                folderName = splitFolderPath[splitFolderPath.Length - 1];
-                _folderPath = Path.GetDirectoryName(_folderPath);
-                curentFilePath = _folderPath + @"\" + folderName;
-            }
-            else curentFilePath = Path.Combine(_folderPath, folderName);
-
-
-            if (!Directory.Exists(curentFilePath))
-            {
-                Directory.CreateDirectory(curentFilePath);
+                if (!File.Exists(_folderPath + @"\" + moduleName))
+                {
+                    if(!shortCutDirectories.Contains($@"{Path.Combine(_folderPath, moduleName)}.lnk"))
+                        Directory.CreateDirectory(_folderPath + @"\" + moduleName);
+                }
             }
 
             foreach (KeyValuePair<string, List<string>> dicoFile in _dicoxfilename)
@@ -617,22 +612,24 @@ namespace Translator_RapidScada
 
                             string scada = path.Contains("SCADA") ? "SCADA" : "scada";
                             string[] splitWithSCADA = path.Split(new[] { $@"\{scada}\" }, StringSplitOptions.None);
-                            string subfolderPathWithExtentions = splitWithSCADA[1];
-                            string[] SplitWithAng = subfolderPathWithExtentions.Split(new[] { "ang\\" }, StringSplitOptions.None);
+                            string[] SplitWithAng = splitWithSCADA[1].Split(new[] { "ang\\" }, StringSplitOptions.None);
                             if (tempDirectoryForPathExist != SplitWithAng[0])
                             {
                                 tempDirectoryForPathExist = SplitWithAng[0];
                                 pathExists = false;
                             }
                             string subfolderPath = SplitWithAng[0] + "ang";
-                            string pathCombine = Path.Combine(folderName, subfolderPath);
-                            string completePath = Path.Combine(_folderPath, pathCombine);
+                            string completePath = Path.Combine(_folderPath, subfolderPath);
 
                             //déterminer si ce dossier est un raccourci ou non 
-                            bool isALink = Properties.Settings.Default.IsALink;
-                            if (isALink && !saveInAnOtherFolder)
+                            string[] splitForDirectory = SplitWithAng[0].Split(@"\");
+                            bool isShortCut = false;
+                            if(shortCutDirectories.Contains($@"{Path.Combine(_folderPath, splitForDirectory[0])}.lnk"))
                             {
-                                completePath = Path.GetDirectoryName(path);
+                                completePath = GetLnkTarget($@"{Path.Combine(_folderPath, splitForDirectory[0])}.lnk");
+                                string[] splitLang = subfolderPath.Split(@"\");
+                                completePath = Path.Combine(completePath, splitLang[1]);
+                                isShortCut = true;
                             }
 
                             if (!Directory.Exists(completePath))
@@ -648,16 +645,8 @@ namespace Translator_RapidScada
                                 {
                                     string[] sTemp = SplitWithAng[1].Split('.');
                                     string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
-                                    string completePathDoc = "";
-                                    if (isALink && !saveInAnOtherFolder)
-                                    {
-                                        completePathDoc = Path.Combine(completePath, newFileName);
-                                    }
-                                    else
-                                    {
-                                        string filePath = Path.Combine(pathCombine, newFileName);
-                                        completePathDoc = Path.Combine(_folderPath, filePath);
-                                    }
+                                    string completePathDoc = Path.Combine(completePath, newFileName); 
+                                    
                                     XmlDocument xmlDoc = new XmlDocument();
 
                                     if (!File.Exists(completePathDoc))
@@ -750,6 +739,20 @@ namespace Translator_RapidScada
 
             XmlElement balisePrincipale = doc.CreateElement(nomFichier + "Dictionaries");
             doc.AppendChild(balisePrincipale);
+        }
+
+        public static string GetLnkTarget(string lnkPath)
+        {
+            Shell shell = new Shell();
+            Folder folder = shell.NameSpace(Path.GetDirectoryName(lnkPath));
+            FolderItem folderItem = folder.ParseName(Path.GetFileName(lnkPath));
+            if (folderItem != null)
+            {
+                ShellLinkObject link = (ShellLinkObject)folderItem.GetLink;
+                string targetPath = link.Path;
+                return targetPath; 
+            }
+            return "";
         }
     }
 }
