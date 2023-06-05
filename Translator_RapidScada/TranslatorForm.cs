@@ -29,7 +29,7 @@ namespace Translator_RapidScada
         private List<string> _files = new List<string>(); // selected folder paths
 
         private string[] _pathsXml = { @"\ScadaWeb\plugins\Chart\lang", @"\ScadaWeb\plugins\Config\lang", @"\ScadaWeb\plugins\Registration\lang", @"\ScadaWeb\plugins\SchBasicComp\lang", @"\ScadaWeb\plugins\Scheme\lang", @"\ScadaWeb\plugins\Store\lang", @"\ScadaWeb\plugins\Table\lang", @"\ScadaWeb\plugins\WebPage\lang", @"\ScadaWeb\lang", @"\ScadaTableEditor\Lang", @"\ScadaServer\Lang", @"\ScadaSchemeEditor\Lang", @"\ScadaComm\Lang", @"\ScadaAgent\Lang", @"\ScadaAdmin\Lang" };
-        private string[] _modulesNames = { "ScadaWeb", "ScadaTableEditor", "ScadaServer", "ScadaSchemeEditor", "ScadaComm", "ScadaAgent", "ScadaAdmin" };
+        private string[] _modulesNames = { "ScadaWeb", /*"ScadaTableEditor", */"ScadaServer", "ScadaSchemeEditor", "ScadaComm", "ScadaAgent", "ScadaAdmin" };
 
         private List<string> _listLanguages = new List<string>(); // languages list
         private Dictionary<string, List<string>> _dicoxfilename = new Dictionary<string, List<string>>(); // dictionnary <Dico, NomFichier>
@@ -59,6 +59,12 @@ namespace Translator_RapidScada
 
             if (!String.IsNullOrEmpty(Properties.Settings.Default.FolderPath))
                 chosenPathLabel1.Text = Properties.Settings.Default.FolderPath;
+
+            if (!String.IsNullOrEmpty(Properties.Settings.Default.XlsxPath))
+            {
+                labelCheminExcel.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
+                label5.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
+            }
         }
 
         // extraction of xml files
@@ -90,16 +96,22 @@ namespace Translator_RapidScada
         private void button2_Click(object sender, EventArgs e)
         {
 
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            //fichier par défaut
+            string defaultFileName = "Traductions_RapidScada";
+            saveFileDialog.FileName = defaultFileName;
+
+            saveFileDialog.Filter = "Fichiers Excel (*.xlsx;*.xls)|*.xlsx;*.xls|Tous les fichiers (*.*)|*.*";
+
+            DialogResult result = saveFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
             {
                 try
                 {
-
-                    _excelPath = folderBrowserDialog.SelectedPath;
+                    _excelPath = Path.GetFullPath(saveFileDialog.FileName);
                     labelCheminExcel.Text = "Selection : " + _excelPath;
-
-                    Properties.Settings.Default.XlsxPath = _excelPath + @"\Traductions_RapidScada.xlsx";
+                    Properties.Settings.Default.XlsxPath = _excelPath;
                     Properties.Settings.Default.Save();
                     label5.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
                 }
@@ -108,28 +120,6 @@ namespace Translator_RapidScada
                     MessageBox.Show(_errFolder + ex.Message);
                 }
             }
-
-            //SaveFileDialog saveFileDialog = new SaveFileDialog();
-
-            ////fichier par défaut
-            //string defaultFileName = "Traductions_RapidScada";
-            //saveFileDialog.FileName = defaultFileName;
-
-            //saveFileDialog.Filter = "Fichiers Excel (*.xlsx;*.xls)|*.xlsx;*.xls|Tous les fichiers (*.*)|*.*";
-
-            //DialogResult result = saveFileDialog.ShowDialog();
-            //if (result == DialogResult.OK)
-            //{
-            //    try
-            //    {
-            //        _excelPath = Path.GetFullPath(saveFileDialog.FileName);
-            //        labelCheminExcel.Text = "Selection : " + _excelPath;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show(_errFolder + ex.Message);
-            //    }
-            //}
         }
 
         // Excel generation
@@ -202,7 +192,7 @@ namespace Translator_RapidScada
                 _dicoTranslation = new Dictionary<string, Dictionary<string, List<string[]>>>();
                 _currentDt = new DataTable();
                 chosenPathLabel1.Text = "Selection : " + Properties.Settings.Default.FolderPath;
-                labelCheminExcel.Text = "";
+                labelCheminExcel.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
 
                 this.Cursor = Cursors.Default;
             }
@@ -284,16 +274,16 @@ namespace Translator_RapidScada
         {
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-            if (System.IO.File.Exists(_excelPath + "/Traductions_RapidScada.xlsx"))
+            if (System.IO.File.Exists(_excelPath))
             {
-                DialogResult result = MessageBox.Show(_msgExcel + "(" + _excelPath + "/Traductions.xlsx.)\n" +
+                DialogResult result = MessageBox.Show(_msgExcel + "(" + _excelPath +")\n" +
                     _msgEditFile, "Confirmation", MessageBoxButtons.YesNo);
 
                 if (result == DialogResult.Yes)
                 {
                     LoadOldFormSettings();
 
-                    FileInfo path = new FileInfo(_excelPath + "/Traductions_RapidScada.xlsx");
+                    FileInfo path = new FileInfo(_excelPath);
                     path.Delete();
 
                     transformToExcel();
@@ -313,7 +303,7 @@ namespace Translator_RapidScada
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
             // ajout des données de l'excel dans une datatable afin d'utiliser les données
-            using (ExcelPackage package = new ExcelPackage(new System.IO.FileInfo(_excelPath + "/Traductions_RapidScada.xlsx")))
+            using (ExcelPackage package = new ExcelPackage(new System.IO.FileInfo(_excelPath )))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
 
@@ -341,7 +331,7 @@ namespace Translator_RapidScada
 
         private void transformToExcel()
         {
-            using (var package = new ExcelPackage(new FileInfo(_excelPath + "/Traductions_RapidScada.xlsx")))
+            using (var package = new ExcelPackage(new FileInfo(_excelPath)))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Traduction 1");
 
