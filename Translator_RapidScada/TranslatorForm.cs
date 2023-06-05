@@ -95,8 +95,13 @@ namespace Translator_RapidScada
             {
                 try
                 {
+
                     _excelPath = folderBrowserDialog.SelectedPath;
                     labelCheminExcel.Text = "Selection : " + _excelPath;
+
+                    Properties.Settings.Default.XlsxPath = _excelPath + @"\Traductions_RapidScada.xlsx";
+                    Properties.Settings.Default.Save();
+                    label5.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
                 }
                 catch (Exception ex)
                 {
@@ -104,7 +109,27 @@ namespace Translator_RapidScada
                 }
             }
 
+            //SaveFileDialog saveFileDialog = new SaveFileDialog();
 
+            ////fichier par défaut
+            //string defaultFileName = "Traductions_RapidScada";
+            //saveFileDialog.FileName = defaultFileName;
+
+            //saveFileDialog.Filter = "Fichiers Excel (*.xlsx;*.xls)|*.xlsx;*.xls|Tous les fichiers (*.*)|*.*";
+
+            //DialogResult result = saveFileDialog.ShowDialog();
+            //if (result == DialogResult.OK)
+            //{
+            //    try
+            //    {
+            //        _excelPath = Path.GetFullPath(saveFileDialog.FileName);
+            //        labelCheminExcel.Text = "Selection : " + _excelPath;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show(_errFolder + ex.Message);
+            //    }
+            //}
         }
 
         // Excel generation
@@ -422,23 +447,23 @@ namespace Translator_RapidScada
 
         // excel file selection
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Fichiers Excel (*.xls, *.xlsx)|*.xls;*.xlsx|Tous les fichiers (*.*)|*.*";
+        //private void button4_Click(object sender, EventArgs e)
+        //{
+        //    using (OpenFileDialog openFileDialog = new OpenFileDialog())
+        //    {
+        //        openFileDialog.Filter = "Fichiers Excel (*.xls, *.xlsx)|*.xls;*.xlsx|Tous les fichiers (*.*)|*.*";
 
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    _excelPath = openFileDialog.FileName;
+        //        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        //        {
+        //            _excelPath = openFileDialog.FileName;
 
-                    Properties.Settings.Default.XlsxPath = _excelPath;
-                    Properties.Settings.Default.Save();
+        //            Properties.Settings.Default.XlsxPath = _excelPath;
+        //            Properties.Settings.Default.Save();
 
-                    label5.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
-                }
-            }
-        }
+        //            label5.Text = "Selection : " + Properties.Settings.Default.XlsxPath;
+        //        }
+        //    }
+        //}
 
         // excel file extraction
 
@@ -590,7 +615,7 @@ namespace Translator_RapidScada
             {
                 if (!File.Exists(_folderPath + @"\" + moduleName))
                 {
-                    if(!shortCutDirectories.Contains($@"{Path.Combine(_folderPath, moduleName)}.lnk"))
+                    if (!shortCutDirectories.Contains($@"{Path.Combine(_folderPath, moduleName)}.lnk"))
                         Directory.CreateDirectory(_folderPath + @"\" + moduleName);
                 }
             }
@@ -623,13 +648,11 @@ namespace Translator_RapidScada
 
                             //déterminer si ce dossier est un raccourci ou non 
                             string[] splitForDirectory = SplitWithAng[0].Split(@"\");
-                            bool isShortCut = false;
-                            if(shortCutDirectories.Contains($@"{Path.Combine(_folderPath, splitForDirectory[0])}.lnk"))
+                            if (shortCutDirectories.Contains($@"{Path.Combine(_folderPath, splitForDirectory[0])}.lnk"))
                             {
                                 completePath = GetLnkTarget($@"{Path.Combine(_folderPath, splitForDirectory[0])}.lnk");
                                 string[] splitLang = subfolderPath.Split(@"\");
                                 completePath = Path.Combine(completePath, splitLang[1]);
-                                isShortCut = true;
                             }
 
                             if (!Directory.Exists(completePath))
@@ -645,8 +668,8 @@ namespace Translator_RapidScada
                                 {
                                     string[] sTemp = SplitWithAng[1].Split('.');
                                     string newFileName = sTemp[0] + "." + translation.Value[0][1] + "." + sTemp[2];
-                                    string completePathDoc = Path.Combine(completePath, newFileName); 
-                                    
+                                    string completePathDoc = Path.Combine(completePath, newFileName);
+
                                     XmlDocument xmlDoc = new XmlDocument();
 
                                     if (!File.Exists(completePathDoc))
@@ -750,7 +773,7 @@ namespace Translator_RapidScada
             {
                 ShellLinkObject link = (ShellLinkObject)folderItem.GetLink;
                 string targetPath = link.Path;
-                return targetPath; 
+                return targetPath;
             }
             return "";
         }

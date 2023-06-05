@@ -39,7 +39,6 @@
             label1 = new Label();
             label5 = new Label();
             button5 = new Button();
-            button4 = new Button();
             label4 = new Label();
             label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
@@ -70,11 +69,10 @@
             // 
             splitContainer1.Panel2.Controls.Add(label5);
             splitContainer1.Panel2.Controls.Add(button5);
-            splitContainer1.Panel2.Controls.Add(button4);
             splitContainer1.Panel2.Controls.Add(label4);
             splitContainer1.Panel2.Controls.Add(label3);
-            splitContainer1.Size = new Size(1033, 457);
-            splitContainer1.SplitterDistance = 507;
+            splitContainer1.Size = new Size(1190, 457);
+            splitContainer1.SplitterDistance = 584;
             splitContainer1.TabIndex = 0;
             // 
             // button3
@@ -90,6 +88,7 @@
             // labelCheminExcel
             // 
             labelCheminExcel.AutoSize = true;
+            labelCheminExcel.BackColor = SystemColors.AppWorkspace;
             labelCheminExcel.Location = new Point(12, 288);
             labelCheminExcel.Name = "labelCheminExcel";
             labelCheminExcel.Size = new Size(0, 20);
@@ -117,6 +116,7 @@
             // chosenPathLabel1
             // 
             chosenPathLabel1.AutoSize = true;
+            chosenPathLabel1.BackColor = SystemColors.AppWorkspace;
             chosenPathLabel1.ImageAlign = ContentAlignment.MiddleLeft;
             chosenPathLabel1.Location = new Point(12, 205);
             chosenPathLabel1.Name = "chosenPathLabel1";
@@ -155,56 +155,47 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(34, 194);
+            label5.BackColor = SystemColors.AppWorkspace;
+            label5.Location = new Point(34, 205);
             label5.Name = "label5";
             label5.Size = new Size(0, 20);
             label5.TabIndex = 8;
             // 
             // button5
             // 
-            button5.Location = new Point(150, 377);
+            button5.Location = new Point(192, 377);
             button5.Name = "button5";
-            button5.Size = new Size(226, 29);
+            button5.Size = new Size(274, 29);
             button5.TabIndex = 8;
-            button5.Text = "Génération des fichiers xml";
+            button5.Text = "Génération des fichiers de traduction";
             button5.UseVisualStyleBackColor = true;
             button5.Click += button5_Click;
-            // 
-            // button4
-            // 
-            button4.Location = new Point(371, 162);
-            button4.Name = "button4";
-            button4.Size = new Size(94, 29);
-            button4.TabIndex = 8;
-            button4.Text = "Parcourir";
-            button4.UseVisualStyleBackColor = true;
-            button4.Click += button4_Click;
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Location = new Point(34, 166);
             label4.Name = "label4";
-            label4.Size = new Size(252, 20);
+            label4.Size = new Size(61, 20);
             label4.TabIndex = 8;
-            label4.Text = "Choisissez le fichier Excel à extraire : ";
+            label4.Text = "Tableur ";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 16F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(9, 43);
+            label3.Location = new Point(21, 43);
             label3.Name = "label3";
-            label3.Size = new Size(486, 37);
+            label3.Size = new Size(569, 37);
             label3.TabIndex = 8;
-            label3.Text = "Génération de nouveaux fichiers xml";
+            label3.Text = "Génération et déploiement des traductions";
             label3.TextAlign = ContentAlignment.TopCenter;
             // 
             // TranslatorForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1033, 457);
+            ClientSize = new Size(1190, 457);
             Controls.Add(splitContainer1);
             Name = "TranslatorForm";
             Text = "Scada Translator";
@@ -231,7 +222,6 @@
         private Label label3;
         private Label label4;
         private Button button5;
-        private Button button4;
         private Label label5;
     }
 }

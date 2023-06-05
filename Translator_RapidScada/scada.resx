@@ -124,28 +124,25 @@
     <value>Parcourir</value>
   </data>
   <data name="button3.Text" xml:space="preserve">
-    <value>Génération du tableau de traductions Excel</value>
+    <value>Générer le tableur</value>
   </data>
   <data name="button4.Text" xml:space="preserve">
     <value>Parcourir</value>
   </data>
   <data name="button5.Text" xml:space="preserve">
-    <value>Génération des fichiers xml</value>
+    <value>Génération des fichiers de traduction</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>Création de l'Excel</value>
+    <value>Génération du tableur de référence</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Choisissez le dossier SCADA :</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
-    <value>Génération de nouveaux fichiers xml</value>
-  </data>
-  <data name="label4.Text" xml:space="preserve">
-    <value>Choisissez le fichier Excel à extraire :</value>
+    <value>Génération et déploiement des traductions</value>
   </data>
   <data name="labelChoixEmplacementExcel.Text" xml:space="preserve">
-    <value>Choisissez où enregistrer le futur fichier Excel :</value>
+    <value>Choisissez l’emplacement du tableur de référence</value>
   </data>
   <data name="_errFile" xml:space="preserve">
     <value>Erreur: le chemin jusqu'à votre fichier n'existe pas.</value>

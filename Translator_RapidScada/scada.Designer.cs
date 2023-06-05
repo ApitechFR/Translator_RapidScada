@@ -178,7 +178,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Génération du tableau de traductions Excel.
+        ///   Recherche une chaîne localisée semblable à Générer le tableur.
         /// </summary>
         internal static string button3_Text {
             get {
@@ -196,7 +196,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Génération des fichiers xml.
+        ///   Recherche une chaîne localisée semblable à Génération des fichiers de traduction.
         /// </summary>
         internal static string button5_Text {
             get {
@@ -205,7 +205,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Création de l&apos;Excel.
+        ///   Recherche une chaîne localisée semblable à Génération du tableur de référence.
         /// </summary>
         internal static string label1_Text {
             get {
@@ -223,7 +223,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Génération de nouveaux fichiers xml.
+        ///   Recherche une chaîne localisée semblable à Génération et déploiement des traductions.
         /// </summary>
         internal static string label3_Text {
             get {
@@ -232,16 +232,7 @@ namespace Translator_RapidScada {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à Choisissez le fichier Excel à extraire :.
-        /// </summary>
-        internal static string label4_Text {
-            get {
-                return ResourceManager.GetString("label4.Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à Choisissez où enregistrer le futur fichier Excel :.
+        ///   Recherche une chaîne localisée semblable à Choisissez l’emplacement du tableur de référence.
         /// </summary>
         internal static string labelChoixEmplacementExcel_Text {
             get {
